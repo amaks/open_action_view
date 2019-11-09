@@ -29,8 +29,3 @@ class OpenActionViewCommand(sublime_plugin.TextCommand):
     for c in array:
       if os.path.isfile(view_file_full_path + c):
         sublime.active_window().open_file(view_file_full_path + c)
-
-    # self.view.show_popup_menu('items', self.done)
-
-  # def done(self):
-  #   print("finished")
