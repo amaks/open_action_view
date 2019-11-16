@@ -1,31 +1,32 @@
 import sublime, sublime_plugin, os
-# cmd + alt + l
+# cmd + alt + 7
 
 class OpenActionViewCommand(sublime_plugin.TextCommand):
   def run(self, edit):
-    file_name   = self.view.file_name()
-    source_path = os.path.dirname(file_name)
-    folder_path = os.path.dirname(source_path)
-
-    view_folder = file_name.split('/')[-1].split('_controller.rb')[0]
 
     region   = self.view.sel()[0]
     all_defs = self.view.find_all(' def ')
 
-    # FIXME a few of them could be smaller then chosen region
     for d in all_defs:
       if d < region:
         line      = self.view.line(d)
         line_text = self.view.substr(line)
         view_name = line_text.split('def ')[1].strip()
 
-    # FIXME complicated controller names
+    view_file_full_path = self.find_view_file_full_path(view_name)
 
-    rails_view_path = source_path.replace('controllers', 'views') + '/' + view_folder + '/'
-    view_file_full_path = rails_view_path + view_name
+    self.create_menu(view_file_full_path)
 
+  def create_menu(self, view_file_full_path):
     array = ['.haml', '.html.erb', '.html.slim', '.js.erb']
 
     for c in array:
       if os.path.isfile(view_file_full_path + c):
         sublime.active_window().open_file(view_file_full_path + c)
+
+  def find_view_file_full_path(self, view_name):
+    file_name       = self.view.file_name()
+    source_path     = os.path.dirname(file_name)
+    view_folder     = file_name.split('/')[-1].split('_controller.rb')[0]
+    rails_view_path = source_path.replace('controllers', 'views') + '/' + view_folder + '/'
+    return rails_view_path + view_name
