@@ -18,7 +18,7 @@ class OpenActionViewCommand(sublime_plugin.TextCommand):
     self.create_menu(view_file_full_path)
 
   def create_menu(self, view_file_full_path):
-    array = ['.haml', '.html.erb', '.html.slim', '.js.erb']
+    array = ['.haml', '.html.erb', '.html.slim', '.js.erb', '.pdf.erb', '.html.haml']
 
     for c in array:
       if os.path.isfile(view_file_full_path + c):
